@@ -101,3 +101,24 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
      
     return 0;
 }
+
+简单下载文件
+HINTERNET hNet = InternetOpen("FILENAME", INTERNET_OPEN_TYPE_PRECONFIG, NULL, NULL, 0);
+HINTERNET hUrlFile = InternetOpenUrl(hNet, strUrl.c_str(), NULL, 0, INTERNET_FLAG_RELOAD, 0);
+char buffer[400 * 1024] = {0};
+DWORD dwBytes = 0;
+if (InternetReadFile(hUrlFile, buffer, sizeof(buffer), &dwBytes) && dwBytes > 0)
+{
+    ofstream fout(strFileName, ios::binary);
+    if (fout)
+    {
+        while (dwBytes > 0)
+        {
+            fout.write(buffer, dwBytes);
+            InternetReadFile(hUrlFile, buffer, sizeof(buffer), &dwBytes);
+        }
+        fout.close();
+        InternetCloseHandle(hUrlFile);
+        InternetCloseHandle(hNet);
+    }
+}
