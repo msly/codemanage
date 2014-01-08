@@ -36,3 +36,28 @@ std::vector<std::string> split(const std::string &s, char delim) {
     split(s, delim, elems);
     return elems;
 }
+
+
+----------
+CString转string
+void ConvertCString2string(CString& strSrc,std::string& strDes) 
+{ 
+    #ifndef UNICODE 
+    strDes = strSrc; 
+     
+    #else 
+    USES_CONVERSION; 
+     
+    strDes = W2A(strSrc.LockBuffer()); 
+    strSrc.UnlockBuffer(); 
+    #endif 
+ 
+}
+
+----------
+#include <sstream>
+#include <iomanip>
+os << hex << setw(2) << setfill('0') << uppercase << int(password[i]);
+// 将输出1234.568，已经替我们做好了四舍五入
+os<<fixed<<setprecision(3)<<1234.5678;
+os << showbase 显示进制 如16进制显示“0X”
