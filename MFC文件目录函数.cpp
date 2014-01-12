@@ -83,3 +83,14 @@ if(nIndex != -1)
     strCurPath = strCurPath.Left(nIndex+1);
 }
 return strCurPath;
+
+
+获取文件大小
+struct stat file_info;
+/* get the file size of the local file */ 
+if(stat(LOCAL_FILE, &file_info)) 
+{
+    printf("Couldnt open '%s': %s\n", LOCAL_FILE, strerror(errno));
+    return 1;
+}
+fsize = (curl_off_t)file_info.st_size;
