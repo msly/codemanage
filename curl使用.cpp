@@ -62,3 +62,7 @@ curl_easy_setopt(curl_handle,   CURLOPT_WRITEDATA, bodyfile);
 显示调试信息
 /* Switch on full protocol/debug output */ 
 curl_easy_setopt(curl_handle, CURLOPT_VERBOSE, 1L);
+
+
+//=====================================================================
+
