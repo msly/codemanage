@@ -1,3 +1,4 @@
+b2 --with-system --build-type=complete toolset=msvc-7.1
 
 原子操作
 #include <boost/interprocess/detail/atomic.hpp>
