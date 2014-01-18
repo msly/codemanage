@@ -43,3 +43,17 @@ using boost::int8_t;
 
 boost::posix_time::microsec_clock::local_time();
 boost::posix_time::milliseconds(1000);
+
+//-----------------------------------------------------------------------------
+boost::ptree来将解析json
+
+string str = "{\"51\":1,\"50\":1}";
+stringstream stream;
+stream<<str;
+ptree tree;
+read_json(stream, tree);
+
+因为ptree 下层使用的 spirit 库默认不是线程安全的 。需要在使用 include spirit 头文件的时候使用 宏 
+#define BOOST_SPIRIT_THREADSAFE
+
+//-----------------------------------------------------------------------------
