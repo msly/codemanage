@@ -61,3 +61,9 @@ os << hex << setw(2) << setfill('0') << uppercase << int(password[i]);
 // 将输出1234.568，已经替我们做好了四舍五入
 os<<fixed<<setprecision(3)<<1234.5678;
 os << showbase 显示进制 如16进制显示“0X”
+
+----------
+vector转stringstream
+std::vector<Foo> v = ...;
+std::ostringstream s;
+std::copy(v.begin(), v.end(), std::ostream_iterator<Foo>(s));
