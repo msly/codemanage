@@ -1,4 +1,5 @@
 b2 --with-system --build-type=complete toolset=msvc-7.1
+b2 --with-system --build-type=complete toolset=msvc-12.0
 
 原子操作
 #include <boost/interprocess/detail/atomic.hpp>
