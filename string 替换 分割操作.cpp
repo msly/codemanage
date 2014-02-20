@@ -67,3 +67,73 @@ vector转stringstream
 std::vector<Foo> v = ...;
 std::ostringstream s;
 std::copy(v.begin(), v.end(), std::ostream_iterator<Foo>(s));
+
+------------
+tr1 正则表达式
+#include <iostream>  
+#include <string>  
+#include <regex>  
+#include <cassert>  
+using namespace std;  
+int main()  
+{  
+    string str = "Hello world";  
+    tr1::regex rx("ello");  
+    // [1] regex_search  
+    //assert( regex_search(str.begin(), str.end(), rx) );  
+    if (regex_search(str.begin(), str.end(), rx))  
+    {  
+        cout<<"find it!"<<endl;// ok  
+    }   
+    else  
+    {  
+        cout<<"not find!"<<endl;  
+    }  
+    // [2] How Do I Do a Match? regex_match  
+    str = "Hello world";  
+    rx = "ello";  
+    if (regex_match(str.begin(), str.end(), rx))  
+    {  
+        cout<<"find it!"<<endl;  
+    }   
+    else  
+    {  
+        cout<<"not find!"<<endl;// ok  
+    }  
+    // [3] How Do I Retrieve a Match?   
+    tr1::cmatch res;  
+    str = "<h2>Egg prices</h2>";  
+    rx = "<h(.)>([^<]+)";  
+    tr1::regex_search(str.c_str(), res, rx);  
+    cout << res[1] << ". " << res[2] << "/n";// 2. Egg prices  
+    // [4] How Do I Do a Replace? regex_replace  
+    str = "Hello world";  
+    rx = "world";  
+    string replacement = "planet";  
+    string str2 = std::tr1::regex_replace(str, rx, replacement);  
+    cout<<str2<<endl;// Hello planet  
+    // [5] How Do I Make a Regular Expression Case-insensitive?  
+    str = "My name is wcdj";  
+    tr1::regex rx2("WcdJ",std::tr1::regex_constants::icase);  
+    //assert( regex_search(str.begin(), str.end(), rx) );  
+    if (regex_search(str.begin(), str.end(), rx2))  
+    {  
+        cout<<"find it!"<<endl;// ok  
+    }   
+    else  
+    {  
+        cout<<"not find!"<<endl;  
+    }  
+    str = "My name is wcdj";  
+    tr1::regex rx3("WcdJ");  
+    //assert( regex_search(str.begin(), str.end(), rx) );  
+    if (regex_search(str.begin(), str.end(), rx3))  
+    {  
+        cout<<"find it!"<<endl;  
+    }   
+    else  
+    {  
+        cout<<"not find!"<<endl;// ok  
+    }  
+    return 0;  
+}  
