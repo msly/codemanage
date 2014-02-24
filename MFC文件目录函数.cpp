@@ -29,6 +29,33 @@ while (bContinue)
     strFileName = find.GetFileName();
 }
 
+
+遍历文件夹
+void RecursiveFindFile(CString& strPath)
+{
+   CFileFind ff;
+   BOOL bFind = ff.FindFile(strPath + "\*.*");
+
+   while(bFind)
+   {
+      bFind = ff.FindNextFile();
+      if (ff.IsDots() || ff.IsSystem() || ff.IsHidden())
+         continue;
+      
+      if (ff.IsDirectory())
+      {
+         RecursiveFindFile(ff.GetFilePath());
+      }
+      else
+      {
+         CString strFileName = ff.GetFileName();
+         AfxMessageBox(strFileName);
+      }
+   }
+}
+
+
+
 获取文件创建时间
 unsigned long GetFileNameCreateTime(const char* strFileName)
 {
