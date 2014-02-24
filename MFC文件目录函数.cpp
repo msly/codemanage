@@ -121,3 +121,49 @@ if(stat(LOCAL_FILE, &file_info))
     return 1;
 }
 fsize = (curl_off_t)file_info.st_size;
+
+
+实现文件拖放的一种简洁方法
+本文要介绍的这种方法只须调用一个WINDOWS API函数DragQueryFile即可实现文件的拖放操作，而且完全克服了上述3点不足。下面先介绍一下这个函数。 
+---- DragQueryFile原型为： 
+
+UINT DragQueryFile (HDROP hDrop, UINT iFile, LPTSTR lpszFile, UINTcch)
+---- 其中hDrop是指向拖动文件结构的句柄； 
+---- iFile 是以0开始的被托动文件的序号，因为一次可能拖动多个文件。当此参数 
+---- 设为0xFFFFFFFF，则函数返回拖动文件的数量； 
+---- lpszFile 是指向文件名的缓冲区； 
+---- cch 是文件名缓冲区的大小，即文件名的字符数。 
+---- 明确了该函数的参数后，编程就是一件很简单的事情了。以下给出一个完整的实例，
+程序运行后弹出一个对话框，可以拖动任意数量的文件或目录到上面，
+松开鼠标后，程序先显示拖放文件的数量，然后将拖放的文件名全部显示在一个List Box控件中。
+具体步骤如下： 
+
+建立一个基于对话框的工程drop，然后其它选项全部用缺省值。 
+选中IDD_DROP_DIALOG对话框中Extended Styles的Accept files属性。 
+给IDD_DROP_DIALOG对话框添加一个List Box 控件IDC_LIST1。 
+在ClassWizard中给CdropDlg类添加成员变量m_list，类型为ClistBox。 
+给CdropDlg类中增加处理WINDOWS消息WM_DROPFILES的函数，
+接受系统给出的默认名字OnDropFiles，然后输入以下代码：
+void CDropDlg::OnDropFiles(HDROP hDropInfo) 
+{char *lpszFileName=new char[512],cFileCount[10];
+ int nFileCount,i;
+ nFileCount=::DragQueryFile 
+   (hDropInfo,0xFFFFFFFF,NULL,512);
+ ::AfxMessageBox(itoa(nFileCount,cFileCount,10));
+ for (i=0;i< nFileCount;i++)
+ {
+  UINT nChars=::DragQueryFile
+          (hDropInfo,i,&lpszFileName[0],512);
+  CString str(&lpszFileName[0],nChars);
+  m_List.AddString(str);  // 若对于CEdit，用   m_edit1.SetWindowText(str);
+
+ }
+ ::DragFinish (hDropInfo);   //释放内存
+ i=0;
+ delete []lpszFileName;
+// CDialog::OnDropFiles(hDropInfo);     此语句注释掉
+}
+
+---- 注意程序中的::DragFinish (hDropInfo);语句是必不可少的，它用于释放WINDOWS为处理文件拖放而分配的内存。
+
+WM_DROPFILES消息如果找不到,就先到向导的最后一项class info右下的message filter选windows

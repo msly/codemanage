@@ -54,6 +54,18 @@ void ConvertCString2string(CString& strSrc,std::string& strDes)
  
 }
 
+---------
+CString 多字节转unicode
+#include <atlbase.h>
+
+CString strText(_T("Hello,World!"));
+USES_CONVERSION;
+
+WCHAR* pBuf = T2W(strText.GetBuffer(strText.GetLength()));
+AfxMessageBox(pBuf);
+strText.ReleaseBuffer(strText.GetLength());
+
+
 ----------
 #include <sstream>
 #include <iomanip>
