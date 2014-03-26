@@ -247,3 +247,31 @@ int main( int argc, char * argv[] )
 
 	return 0;
 }
+
+///////////////////////////////////////////////
+设置超时
+//http://stackoverflow.com/questions/4553162/c-boost-asio-how-to-read-write-with-a-timeout
+1. boost::asio::ip::tcp::socket::native
+2. 
+class TimeoutAdjust
+{
+public:
+  TimeoutAdjust(unsigned int dwTimeout) : m_dwTimeout(dwTimeout) {};
+
+  template<class Protocol>
+  int level(const Protocol& p) const {return SOL_SOCKET;}
+
+  template<class Protocol>
+  int name(const Protocol& p) const {return SO_SNDTIMEO;} //SO_RCVTIMEO 
+
+  template<class Protocol>
+  const void* data(const Protocol& p) const {return &m_dwTimeout;}
+
+  template<class Protocol>
+  size_t size(const Protocol& p) const {return sizeof(m_dwTimeout);}
+private:
+  unsigned int m_dwTimeout;
+};
+
+TimeoutAdjust adjust(5000);
+sSocket.set_option(adjust); // sScoket要是打开状态
